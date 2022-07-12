@@ -42,7 +42,7 @@ class _AppLandingState extends State<AppLanding> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('widget.title'),
+        title: const Text('Product Features'),
       ),
       body: _selectedIndex == 0 ? Home() : Favourites(),
       bottomNavigationBar: BottomNavigationBar(
