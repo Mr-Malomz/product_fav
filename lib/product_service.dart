@@ -5,7 +5,7 @@ class ProductService {
   Client client = Client();
   Databases? db;
 
-  NoteService() {
+  ProductService() {
     _init();
   }
 
@@ -15,7 +15,19 @@ class ProductService {
         .setEndpoint(AppConstant().endpoint)
         .setProject(AppConstant().projectId);
 
-    db = Databases(client, databaseId: '');
+    db = Databases(client, databaseId: AppConstant().databaseId);
+
+    //get current session
+    Account account = Account(client);
+    account.get().then((value) => {
+          if (value.toMap()['\$id'].toString().isEmpty)
+            {
+              account
+                  .createAnonymousSession()
+                  .then((value) => value)
+                  .catchError((e) => e)
+            }
+        });
   }
 
   Future<List<Product>> getAllProducts() async {
@@ -41,6 +53,22 @@ class ProductService {
       return favList!;
     } catch (e) {
       throw Exception('Error getting list of favourites');
+    }
+  }
+
+  Future addAsFav(
+      String title, String description, String id, bool isFav) async {
+    try {
+      Product updateProduct =
+          Product(title: title, description: description, isFav: isFav);
+      var data = await db?.updateDocument(
+        collectionId: AppConstant().collectionId,
+        documentId: id,
+        data: updateProduct.toJson(),
+      );
+      return data;
+    } catch (e) {
+      throw Exception('Error updating product');
     }
   }
 }
