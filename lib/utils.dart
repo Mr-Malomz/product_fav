@@ -1,7 +1,7 @@
 class AppConstant {
   final String databaseId = "62ce9dca2b233ee17e19";
   final String projectId = "62ce9dbb875014ac9710";
-  final String endpoint = "http://192.168.1.14/v1";
+  final String endpoint = "http://192.168.1.15/v1";
   final String collectionId = "62cea073e6496bdaf954";
 }
 

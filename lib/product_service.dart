@@ -19,15 +19,17 @@ class ProductService {
 
     //get current session
     Account account = Account(client);
-    account.get().then((value) => {
-          if (value.toMap()['\$id'].toString().isEmpty)
-            {
-              account
-                  .createAnonymousSession()
-                  .then((value) => value)
-                  .catchError((e) => e)
-            }
-        });
+
+    try {
+      await account.get();
+    } on AppwriteException catch (e) {
+      if (e.code == 401) {
+        account
+            .createAnonymousSession()
+            .then((value) => value)
+            .catchError((e) => e);
+      }
+    }
   }
 
   Future<List<Product>> getAllProducts() async {
